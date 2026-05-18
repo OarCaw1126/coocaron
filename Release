@@ -1,0 +1,8 @@
+Origin: Coocaron
+Label: Coocaron
+Suite: stable
+Version: 1.0.0
+Codename: coocaron
+Architectures: arm64 arm64e
+Components: main
+Description: Repo For arm64 supporting iOS 7 up to iOS 26.5 Optimized for Cydia, Sileo, and Zebra.
