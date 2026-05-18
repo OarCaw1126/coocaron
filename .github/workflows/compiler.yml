@@ -1,0 +1,34 @@
+name: Auto Compile Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dpkg-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev
+
+      - name: Compile Packages Indexes
+        run: |
+          dpkg-scanpackages -m ./debs > Packages
+          gzip -c Packages > Packages.gz
+          bzip2 -fk Packages
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Packages Packages.gz Packages.bz2
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Coocaron: Auto-compiled index update [Skip CI]" && git push)
